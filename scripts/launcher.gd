@@ -14,34 +14,13 @@ const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/game
 @onready var selected_game: ColorRect = $selected_game
 
 var jsons: DirAccess
-var json_name: String
 var game_jsons: PackedStringArray
-var games: DirAccess
-var folder_name: String
-
-var game_folder: String
-var game_exec_path: String
-var game_thumbnail_path: String
-var thumbnail_texture: Texture2D
-var resized_thumbnail: Image
-var game_folder_contents: PackedStringArray
-
-var game_button: Button
-var json_string: String
-var json_dict: Dictionary
-
-var info_name
-var info_genres
-var info_author
-var info_description
-
+var folder_names: Array = []
+var buttons: Array = []  # 2D array to hold buttons
+var panel_updated : bool = false
 var game_running: bool = false
 var running_pid: int = -1
-var connected = false
-
-var buttons: Array = []  # 2D array to hold buttons
-
-var panel_updated : bool = false
+var connected  : bool = false
 
 func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
@@ -55,21 +34,39 @@ func _ready() -> void:
 	play_focus.visible = false
 	buttons.clear()
 
-	# Collect JSON file names
+	# Collect and sort JSON file names
+	_load_json_files()
+
+	# Collect and sort folder names
+	_load_game_folders()
+
+	# Create buttons for game folders
+	_create_game_buttons()
+
+	# Set the neighbors for each button
+	set_neighbors(buttons)
+	
+	# Focus the first button
+	if buttons.size() > 0:
+		game_grid.get_child(0).grab_focus()
+		play_button.focus_neighbor_left = game_grid.get_child(0).get_path()
+
+# Function to load JSON files
+func _load_json_files() -> void:
 	jsons = DirAccess.open(JSON_DIR)
-	game_jsons = PackedStringArray()
 	if jsons:
 		jsons.list_dir_begin()
-		json_name = jsons.get_next()
+		var json_name: String = jsons.get_next()
 		while json_name != "":
 			if json_name.ends_with(".json"):
 				game_jsons.append(json_name.get_basename())
 			json_name = jsons.get_next()
 	game_jsons.sort()
 
-	# Collect and sort folder names
-	var folder_names = []
-	games = DirAccess.open(GAME_DIR)
+# Function to load game folder names
+func _load_game_folders() -> void:
+	var folder_name: String
+	var games : DirAccess = DirAccess.open(GAME_DIR)
 	if games:
 		games.list_dir_begin()
 		folder_name = games.get_next()
@@ -79,95 +76,90 @@ func _ready() -> void:
 			folder_name = games.get_next()
 	folder_names.sort()
 
-	# Create buttons for game folders
-	var row = []
+# Function to create buttons for each game
+func _create_game_buttons() -> void:
+	var row : Array = []
 	for folder_name in folder_names:
 		if game_jsons.has(folder_name):
-			game_folder = GAME_DIR + folder_name
-			game_exec_path = game_folder + "/" + folder_name + ".x86_64"
-			game_thumbnail_path = game_folder + "/" + folder_name + ".png"
-
-			# Create the button
-			game_button = Button.new()
-			game_button.set_flat(true)
-			var style_box = StyleBoxFlat.new()
-			game_button.add_theme_stylebox_override("normal", style_box)
-			game_button.add_theme_stylebox_override("hover", style_box)
-			game_button.add_theme_stylebox_override("pressed", style_box)
-			game_button.add_theme_stylebox_override("focused", style_box)
-			game_button.set_meta("exec_path", game_exec_path)
-
-			# Read JSON data
-			var json_file = FileAccess.open(JSON_DIR + folder_name + ".json", FileAccess.READ)
-			if json_file:
-				json_string = json_file.get_as_text()
-				var json = JSON.new()
-				if json.parse(json_string) == OK:
-					var data = json.get_data()
-					game_button.set_meta("name", data.get("name", "Unknown"))
-					game_button.set_meta("author", data.get("author", "Unknown"))
-					game_button.set_meta("description", data.get("description", "No description available"))
-					game_button.set_meta("genres", data.get("genres", "Unknown"))
-
-			# Add thumbnail to the button
-			thumbnail_texture = load(game_thumbnail_path)
-			resized_thumbnail = thumbnail_texture.get_image()
-			resized_thumbnail.resize(235, 187)
-			game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
-
-			# Add button to grid and row
+			var game_button : Button = _create_game_button(folder_name)
 			game_grid.add_child(game_button)
 			row.append(game_button)
+
+			# Add to buttons array when row is complete
 			if row.size() == 2:
 				buttons.append(row)
 				row = []
 
-			# Connect signals for interaction
-			game_button.connect("pressed", update_info_panel.bind(game_button))
-			game_button.connect("mouse_entered", focus_button.bind(game_button))
-			game_button.connect("focus_entered", focus_button.bind(game_button))
-			
+	# Add any remaining buttons if the row isn't complete
 	if row.size() > 0:
-		buttons.append(row)  # Add any remaining buttons
+		buttons.append(row)
 
-	# Set the neighbors for each button
-	set_neighbors(buttons)
-	
-	game_grid.get_child(0).grab_focus()
-	play_button.focus_neighbor_left = game_grid.get_child(0).get_path()
+# Create a game button with all its properties
+func _create_game_button(folder_name: String) -> Button:
+	var game_folder : String = GAME_DIR + folder_name
+	var game_exec_path : String = game_folder + "/" + folder_name + ".x86_64"
+	var game_thumbnail_path : String = game_folder + "/" + folder_name + ".png"
+	var json_data : Dictionary = _load_game_json(folder_name)
 
-func set_neighbors(buttons: Array) -> void:
-	for row_index in range(buttons.size()):
-		var row = buttons[row_index]
+	var game_button : Button = Button.new()
+	game_button.set_flat(true)
+	var style_box : StyleBoxFlat = StyleBoxFlat.new()
+	game_button.add_theme_stylebox_override("normal", style_box)
+	game_button.add_theme_stylebox_override("hover", style_box)
+	game_button.add_theme_stylebox_override("pressed", style_box)
+	game_button.add_theme_stylebox_override("focused", style_box)
+	game_button.set_meta("exec_path", game_exec_path)
+	game_button.set_meta("name", json_data.name)
+	game_button.set_meta("author", json_data.author)
+	game_button.set_meta("description", json_data.description)
+	game_button.set_meta("genres", json_data.genres)
+
+	# Add thumbnail to the button
+	var thumbnail_texture : Resource = load(game_thumbnail_path)
+	var resized_thumbnail : Image = thumbnail_texture.get_image()
+	resized_thumbnail.resize(235, 187)
+	game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
+
+	# Connect signals for interaction
+	game_button.connect("pressed", update_info_panel.bind(game_button))
+	game_button.connect("mouse_entered", focus_button.bind(game_button))
+	game_button.connect("focus_entered", focus_button.bind(game_button))
+
+	return game_button
+
+# Load game JSON data
+func _load_game_json(folder_name: String) -> Dictionary:
+	var json_string: String
+	var json_dict: Dictionary = {}
+	var json_file = FileAccess.open(JSON_DIR + folder_name + ".json", FileAccess.READ)
+	if json_file:
+		json_string = json_file.get_as_text()
+		var json : JSON = JSON.new()
+		if json.parse(json_string) == OK:
+			json_dict = json.get_data()
+	return json_dict
+
+# Set the neighbors for each button in the grid
+func set_neighbors(button_arr: Array) -> void:
+	for row_index in range(button_arr.size()):
+		var row : Array = button_arr[row_index]
 		for col_index in range(row.size()):
-			var button = row[col_index]
-			var neighbor
-			# Set the neighbors for the button (left, right, top, bottom)
-			
-			# Button has a neighbor to the left
-			if col_index > 0:
-				neighbor = row[col_index - 1]
-				button.focus_neighbor_left = neighbor.get_path()
+			var button : Button = row[col_index]
+			_set_button_neighbors(button, row, col_index, row_index)
 
-			# Button has a neighbor to the right
-			if col_index < row.size() - 1:
-				neighbor = row[col_index + 1]
-				button.focus_neighbor_right = neighbor.get_path()
-
-			# For right column buttons, set the right neighbor to $info_panel/play_button
-			if col_index == row.size() - 1:
-				button.focus_neighbor_right = $info_panel/play_button.get_path()
-
-			# Button has a neighbor above
-			if row_index > 0 and col_index < buttons[row_index - 1].size():
-				neighbor = buttons[row_index - 1][col_index]
-				button.focus_neighbor_top = neighbor.get_path()
-
-			# Button has a neighbor below
-			if row_index < buttons.size() - 1 and col_index < buttons[row_index + 1].size():
-				neighbor = buttons[row_index + 1][col_index]
-				button.focus_neighbor_bottom = neighbor.get_path()
-
+# Set neighbors for a single button
+func _set_button_neighbors(button: Button, row: Array, col_index: int, row_index: int) -> void:
+	# Set the neighbors for the button (left, right, top, bottom)
+	if col_index > 0:
+		button.focus_neighbor_left = row[col_index - 1].get_path()
+	if col_index < row.size() - 1:
+		button.focus_neighbor_right = row[col_index + 1].get_path()
+	if col_index == row.size() - 1:
+		button.focus_neighbor_right = $info_panel/play_button.get_path()
+	if row_index > 0 and col_index < buttons[row_index - 1].size():
+		button.focus_neighbor_top = buttons[row_index - 1][col_index].get_path()
+	if row_index < buttons.size() - 1 and col_index < buttons[row_index + 1].size():
+		button.focus_neighbor_bottom = buttons[row_index + 1][col_index].get_path()
 
 # Highlight the selected game on hover
 func focus_button(button: Button) -> void:
@@ -200,7 +192,7 @@ func _on_game_button_pressed(button: Button) -> void:
 func _on_play_button_pressed(button: Button) -> void:
 	if game_running:
 		return
-	var exec_path = button.get_meta("exec_path")
+	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
 		running_pid = OS.create_process(exec_path, [])
 		game_running = true
