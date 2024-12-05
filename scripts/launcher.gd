@@ -38,6 +38,8 @@ var game_running : bool = false
 var running_pid : int = -1
 var connected = false
 
+@onready var selected_game: ColorRect = $selected_game
+
 func _process(_delta: float) -> void:
 	# Prevents more than one game from being lanuched at a time
 	if game_running and OS.is_process_running(running_pid) == false:
@@ -45,7 +47,9 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	info_panel.visible = false
+	selected_game.visible = false
 	
+	# Find all the names of the json files
 	jsons = DirAccess.open(JSON_DIR)
 	if jsons:
 		jsons.list_dir_begin()
@@ -56,6 +60,7 @@ func _ready() -> void:
 			json_name = jsons.get_next()
 	game_jsons.sort()
 			
+	# Check every folder in the games dir to see if it exists in the json filenames array
 	games = DirAccess.open(GAME_DIR)
 	if games:
 		games.list_dir_begin()
@@ -70,8 +75,16 @@ func _ready() -> void:
 				
 				# Instantiate and add the button
 				game_button = Button.new()
+				
+				# Style the button
+				game_button.set_flat(true)
+				var style_box = StyleBoxFlat.new()
+				game_button.add_theme_stylebox_override("normal", style_box)
+				game_button.add_theme_stylebox_override("hover", style_box)
+				game_button.add_theme_stylebox_override("pressed", style_box)
+				game_button.add_theme_stylebox_override("focused", style_box)
+				
 				game_button.set_meta("exec_path", game_exec_path)  # Store the exec path
-				#game_button.set_meta("game_name", game_folder) # store game name
 				
 				# Open the corresponding JSON and attach all the relevant information to the button as metadata
 				var json_file = FileAccess.open(JSON_DIR + folder_name + ".json", FileAccess.READ)
@@ -109,8 +122,17 @@ func _ready() -> void:
 				
 				# Connect the button signal, and bind the game_button as an input to it
 				game_button.connect("pressed", update_info_panel.bind(game_button))
+				game_button.connect("mouse_entered", focus_button.bind(game_button))
+				game_button.connect("mouse_exited", unfocus_button.bind(game_button))
 				
 			folder_name = games.get_next()
+
+func focus_button(button: Button) -> void:
+	selected_game.visible = true
+	selected_game.global_position = button.global_position
+
+func unfocus_button(button: Button) -> void:
+	selected_game.visible = false
 
 func update_info_panel(button: Button) -> void:
 	# Populate the labels with the appropriate text

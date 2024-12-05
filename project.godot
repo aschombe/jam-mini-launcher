@@ -20,6 +20,25 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 
+[input]
+
+right={
+"deadzone": 0.5,
+"events": []
+}
+left={
+"deadzone": 0.5,
+"events": []
+}
+up={
+"deadzone": 0.5,
+"events": []
+}
+down={
+"deadzone": 0.5,
+"events": []
+}
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
