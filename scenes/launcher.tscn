@@ -1,0 +1,155 @@
+[gd_scene load_steps=3 format=3 uid="uid://dg32u7330lcbk"]
+
+[ext_resource type="Script" path="res://scripts/launcher.gd" id="1_dmxcq"]
+[ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="2_ce4g5"]
+
+[node name="launcher" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dmxcq")
+
+[node name="background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="title" type="Label" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 462.0
+offset_bottom = 79.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "JAM Mini Launcher"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(556, 560)
+layout_mode = 0
+offset_left = 11.0
+offset_top = 81.0
+offset_right = 566.0
+offset_bottom = 217.0
+
+[node name="game_grid" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="launch_game_1" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_2" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_3" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_4" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_5" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_6" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_7" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_8" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_9" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_10" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_11" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_12" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_13" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_14" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_15" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_16" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_17" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_18" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_19" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_20" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_21" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_22" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_23" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_24" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_25" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_26" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_27" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
+
+[node name="launch_game_28" type="Button" parent="ScrollContainer/game_grid"]
+layout_mode = 2
+icon = ExtResource("2_ce4g5")
