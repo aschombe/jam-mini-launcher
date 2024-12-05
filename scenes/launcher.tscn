@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dg32u7330lcbk"]
+[gd_scene load_steps=2 format=3 uid="uid://dg32u7330lcbk"]
 
 [ext_resource type="Script" path="res://scripts/launcher.gd" id="1_dmxcq"]
-[ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="2_ce4g5"]
 
 [node name="launcher" type="Control"]
 layout_mode = 3
@@ -30,126 +29,126 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
 text = "JAM Mini Launcher"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-custom_minimum_size = Vector2(556, 560)
+[node name="game_scroller" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(500, 560)
 layout_mode = 0
 offset_left = 11.0
 offset_top = 81.0
-offset_right = 566.0
-offset_bottom = 217.0
+offset_right = 511.0
+offset_bottom = 641.0
 
-[node name="game_grid" type="GridContainer" parent="ScrollContainer"]
+[node name="game_grid" type="GridContainer" parent="game_scroller"]
 layout_mode = 2
-columns = 4
+columns = 2
 
-[node name="launch_game_1" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="divider" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
-[node name="launch_game_2" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="info_panel" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 660.0
+offset_right = 1280.0
+offset_bottom = 720.0
 
-[node name="launch_game_3" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="game_title" type="Label" parent="info_panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = -29.0
+offset_right = 250.0
+offset_bottom = 261.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "Hazardous Night"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
-[node name="launch_game_4" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="author" type="Label" parent="info_panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = -87.0
+offset_right = 132.5
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 45
+text = "Andrew Schomber"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="launch_game_5" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="genres" type="Label" parent="info_panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = -23.0
+offset_right = 132.5
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
+text = "Horror"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="launch_game_6" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="description" type="Label" parent="info_panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -14.0
+offset_right = 214.0
+offset_bottom = 249.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 25
+text = "You're invited by the mayor of a town to investigate strange events that occur at nighttime."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
-[node name="launch_game_7" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_8" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_9" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_10" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_11" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_12" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_13" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_14" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_15" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_16" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_17" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_18" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_19" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_20" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_21" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_22" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_23" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_24" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_25" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_26" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_27" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
-
-[node name="launch_game_28" type="Button" parent="ScrollContainer/game_grid"]
-layout_mode = 2
-icon = ExtResource("2_ce4g5")
+[node name="play_button" type="Button" parent="info_panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -57.0
+offset_top = -73.0
+offset_right = 24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+text = "Start!"
