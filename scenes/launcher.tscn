@@ -159,3 +159,16 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 15
 text = "Start!"
+
+[node name="play_focus" type="ColorRect" parent="info_panel/play_button"]
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 0, 0.517647)
+
+[connection signal="focus_entered" from="info_panel/play_button" to="." method="_on_play_button_focus_entered"]
+[connection signal="focus_exited" from="info_panel/play_button" to="." method="_on_play_button_focus_exited"]
