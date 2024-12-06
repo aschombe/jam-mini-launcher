@@ -21,6 +21,8 @@ var panel_updated : bool = false
 var game_running: bool = false
 var running_pid: int = -1
 var connected  : bool = false
+var last_button_pressed : Button
+var start_button_focused : bool = false
 
 func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
@@ -49,10 +51,6 @@ func _ready() -> void:
 	# Focus the first button
 	if buttons.size() > 0:
 		game_grid.get_child(0).grab_focus()
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_pressed("click"):
-		pass
 
 # Function to load JSON files
 func _load_json_files() -> void:
@@ -124,10 +122,22 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
 
 	# Connect signals for interaction
+	game_button.connect("pressed", focus_start.bind(game_button))
 	game_button.connect("focus_entered", update_info_panel.bind(game_button))
 	game_button.connect("focus_entered", focus_button.bind(game_button))
 
 	return game_button
+
+func focus_start(button: Button):
+	last_button_pressed = button
+	start_button_focused = true
+	play_button.grab_focus()
+
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_pressed("ui_cancel") and start_button_focused:
+		last_button_pressed.grab_focus()
+		start_button_focused = false
 
 # Load game JSON data
 func _load_game_json(folder_name: String) -> Dictionary:
