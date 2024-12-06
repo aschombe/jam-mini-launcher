@@ -28,6 +28,10 @@ func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
 	if game_running and not OS.is_process_running(running_pid):
 		game_running = false
+		
+	# Prevents inputs while game is running
+	if not game_running:
+		set_process_input(true)
 
 func _ready() -> void:
 	# Initialize variables
@@ -213,6 +217,8 @@ func _on_play_button_pressed(button: Button) -> void:
 	if exec_path:
 		running_pid = OS.create_process(exec_path, [])
 		game_running = true
+		# PAUSE INPUT HERE
+		set_process_input(false)
 	else:
 		print("No exec path found for button: ", button.name)
 
