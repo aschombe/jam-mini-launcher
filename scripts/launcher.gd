@@ -49,7 +49,10 @@ func _ready() -> void:
 	# Focus the first button
 	if buttons.size() > 0:
 		game_grid.get_child(0).grab_focus()
-		play_button.focus_neighbor_left = game_grid.get_child(0).get_path()
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_pressed("click"):
+		pass
 
 # Function to load JSON files
 func _load_json_files() -> void:
@@ -121,8 +124,7 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
 
 	# Connect signals for interaction
-	game_button.connect("pressed", update_info_panel.bind(game_button))
-	game_button.connect("mouse_entered", focus_button.bind(game_button))
+	game_button.connect("focus_entered", update_info_panel.bind(game_button))
 	game_button.connect("focus_entered", focus_button.bind(game_button))
 
 	return game_button
@@ -154,12 +156,17 @@ func _set_button_neighbors(button: Button, row: Array, col_index: int, row_index
 		button.focus_neighbor_left = row[col_index - 1].get_path()
 	if col_index < row.size() - 1:
 		button.focus_neighbor_right = row[col_index + 1].get_path()
+	# If the button is a right column button, set its right neighbor to itself
 	if col_index == row.size() - 1:
-		button.focus_neighbor_right = $info_panel/play_button.get_path()
+		button.focus_neighbor_right = button.get_path()
 	if row_index > 0 and col_index < buttons[row_index - 1].size():
 		button.focus_neighbor_top = buttons[row_index - 1][col_index].get_path()
 	if row_index < buttons.size() - 1 and col_index < buttons[row_index + 1].size():
 		button.focus_neighbor_bottom = buttons[row_index + 1][col_index].get_path()
+	# If the button is in the last row, set its bottom neighbor to itself
+	if row_index == buttons.size() - 1:
+		button.focus_neighbor_bottom = button.get_path()
+
 
 # Highlight the selected game on hover
 func focus_button(button: Button) -> void:
@@ -167,8 +174,8 @@ func focus_button(button: Button) -> void:
 	selected_game.global_position = button.global_position
 
 # Remove highlight on hover exit
-func unfocus_button(_button: Button) -> void:
-	selected_game.visible = false
+#func unfocus_button(_button: Button) -> void:
+	#selected_game.visible = false
 
 # Update the info panel with game details
 func update_info_panel(button: Button) -> void:
