@@ -187,10 +187,6 @@ func focus_button(button: Button) -> void:
 	selected_game.visible = true
 	selected_game.global_position = button.global_position
 
-# Remove highlight on hover exit
-#func unfocus_button(_button: Button) -> void:
-	#selected_game.visible = false
-
 # Update the info panel with game details
 func update_info_panel(button: Button) -> void:
 	panel_updated = true
@@ -215,7 +211,7 @@ func _on_play_button_pressed(button: Button) -> void:
 		return
 	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
-		running_pid = OS.create_process(exec_path, [])
+		running_pid = OS.create_process(exec_path, ["-f"])
 		game_running = true
 		# PAUSE INPUT HERE
 		set_process_input(false)
