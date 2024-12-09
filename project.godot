@@ -13,6 +13,7 @@ config_version=5
 config/name="Jam Mini launcher"
 run/main_scene="res://scenes/launcher.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
+run/max_fps=15
 config/icon="res://assets/icon.svg"
 
 [display]
