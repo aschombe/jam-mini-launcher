@@ -1,7 +1,10 @@
 extends Control
 
-const JSON_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/jsons/"
-const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+#const JSON_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/jsons/"
+#const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+
+const JSON_DIR: String = "/home/andrew/launcher_files/jsons/"
+const GAME_DIR: String = "/home/andrew/launcher_files/games/"
 
 @onready var game_grid: GridContainer = $game_scroller/game_grid
 @onready var info_panel: Control = $info_panel
@@ -102,7 +105,7 @@ func _create_game_buttons() -> void:
 # Create a game button with all its properties
 func _create_game_button(folder_name: String) -> Button:
 	var game_folder : String = GAME_DIR + folder_name
-	var game_exec_path : String = game_folder + "/" + folder_name + ".x86_64"
+	var game_exec_path : String = game_folder + "/" + folder_name + ".arm64	"
 	var game_thumbnail_path : String = game_folder + "/" + folder_name + ".png"
 	var json_data : Dictionary = _load_game_json(folder_name)
 
@@ -120,7 +123,7 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.set_meta("genres", json_data.genres)
 
 	# Add thumbnail to the button
-	var thumbnail_texture : Resource = load(game_thumbnail_path)
+	var thumbnail_texture: Resource = load(game_thumbnail_path)
 	var resized_thumbnail : Image = thumbnail_texture.get_image()
 	resized_thumbnail.resize(235, 187)
 	game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
