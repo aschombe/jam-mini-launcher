@@ -1,6 +1,7 @@
 extends Control
 
-const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+#const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+const GAME_DIR: String = "/home/andrew/launcher_files/games/"
 
 @onready var game_grid: GridContainer = $game_scroller/game_grid
 @onready var info_panel: Control = $info_panel
