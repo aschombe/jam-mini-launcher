@@ -43,6 +43,7 @@ offset_left = 11.0
 offset_top = 81.0
 offset_right = 511.0
 offset_bottom = 641.0
+follow_focus = true
 
 [node name="game_grid" type="GridContainer" parent="game_scroller"]
 layout_mode = 2

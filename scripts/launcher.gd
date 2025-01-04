@@ -1,7 +1,7 @@
 extends Control
 
 #const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
-const GAME_DIR: String = "/home/andrew/launcher_files/games/"
+const GAME_DIR: String ="/Games/"
 
 @onready var game_grid: GridContainer = $game_scroller/game_grid
 @onready var info_panel: Control = $info_panel
@@ -19,10 +19,13 @@ var panel_updated: bool = false
 var game_running: bool = false
 var running_pid: int = -1
 var connected: bool = false
+var focused_button: Button
 var last_button_pressed: Button
 var start_button_focused: bool = false
 
 func _process(_delta: float) -> void:
+	focus_button(focused_button)
+	
 	# Prevents more than one game from being launched at a time
 	if game_running and not OS.is_process_running(running_pid):
 		game_running = false
@@ -33,13 +36,14 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	info_panel.visible = false
-	selected_game.visible = false
+	#selected_game.visible = false
 	play_focus.visible = false
 	buttons.clear()
 	_load_game_folders()
 	_create_game_buttons()
 	set_neighbors(buttons)
 	if buttons.size() > 0:
+		focused_button = game_grid.get_child(0)
 		game_grid.get_child(0).grab_focus()
 
 # Function to load game folder names
@@ -77,7 +81,7 @@ func _create_game_buttons() -> void:
 # Create a game button with all its properties
 func _create_game_button(folder_name: String) -> Button:
 	var game_folder: String = GAME_DIR + folder_name
-	var game_exec_path: String = game_folder + "/" + folder_name + ".arm64"
+	var game_exec_path: String = game_folder + "/" + folder_name + ".dmg"
 	var game_thumbnail_path: String = game_folder + "/" + folder_name + ".png"
 	var json_data: Dictionary = _load_game_json(folder_name)
 
@@ -95,8 +99,7 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.set_meta("genres", json_data.genres)
 
 	# Add thumbnail to the button
-	var thumbnail_texture: Resource = load(game_thumbnail_path)
-	var resized_thumbnail: Image = thumbnail_texture.get_image()
+	var resized_thumbnail : Image = Image.load_from_file(game_thumbnail_path)
 	resized_thumbnail.resize(235, 187)
 	game_button.icon = ImageTexture.create_from_image(resized_thumbnail)
 
@@ -157,7 +160,7 @@ func _set_button_neighbors(button: Button, row: Array, col_index: int, row_index
 
 # Highlight the selected game on hover
 func focus_button(button: Button) -> void:
-	selected_game.visible = true
+	focused_button = button
 	selected_game.global_position = button.global_position
 
 # Update the info panel with game details
