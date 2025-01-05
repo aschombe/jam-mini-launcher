@@ -16,6 +16,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -652.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -70,77 +71,104 @@ offset_left = 660.0
 offset_right = 1280.0
 offset_bottom = 720.0
 
-[node name="game_title" type="Label" parent="info_panel"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -260.0
-offset_top = -29.0
-offset_right = 250.0
-offset_bottom = 261.0
-grow_horizontal = 2
+[node name="video_bg" type="VideoStreamPlayer" parent="info_panel"]
+layout_mode = 0
+offset_right = 618.0
+offset_bottom = 723.0
+autoplay = true
+expand = true
+
+[node name="info_list" type="VBoxContainer" parent="info_panel"]
+layout_mode = 0
+offset_left = 71.0
+offset_top = 46.0
+offset_right = 560.0
+offset_bottom = 602.0
+
+[node name="game_title" type="Label" parent="info_panel/info_list"]
+z_index = 2
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 50
 text = "Hazardous Night"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="author" type="Label" parent="info_panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -112.0
-offset_right = 200.0
-offset_bottom = -49.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="genres" type="Label" parent="info_panel/info_list"]
+z_index = 2
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 45
-text = "Andrew Schomber"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="genres" type="Label" parent="info_panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -132.5
-offset_top = -48.0
-offset_right = 132.5
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 35
 text = "Horror"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="description" type="Label" parent="info_panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -214.0
-offset_top = 29.0
-offset_right = 214.0
-offset_bottom = 249.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="description" type="Label" parent="info_panel/info_list"]
+z_index = 2
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 25
 text = "You're invited by the mayor of a town to investigate strange events that occur at nighttime."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="type" type="Label" parent="info_panel/info_list"]
+z_index = 2
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 25
+text = "Singleplayer
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="creation_year" type="Label" parent="info_panel/info_list"]
+z_index = 2
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 25
+text = "Created: 2024"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="author" type="Label" parent="info_panel/info_list"]
+z_index = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 45
+text = "Andrew Schomber"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="grad_year" type="Label" parent="info_panel/info_list"]
+z_index = 2
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 25
+text = "Class of 2026"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

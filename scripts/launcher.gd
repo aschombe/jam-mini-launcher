@@ -1,14 +1,19 @@
 extends Control
 
-#const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
-const GAME_DIR: String ="/Games/"
+const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+#const GAME_DIR: String ="/Games/"
+@onready var game_title: Label = $info_panel/info_list/game_title
+@onready var author: Label = $info_panel/info_list/author
+@onready var genres: Label = $info_panel/info_list/genres
+@onready var description: Label = $info_panel/info_list/description
+@onready var type: Label = $info_panel/info_list/type
+@onready var creation_year: Label = $info_panel/info_list/creation_year
+@onready var grad_year: Label = $info_panel/info_list/grad_year
 
 @onready var game_grid: GridContainer = $game_scroller/game_grid
 @onready var info_panel: Control = $info_panel
-@onready var game_title: Label = $info_panel/game_title
-@onready var author: Label = $info_panel/author
-@onready var genres: Label = $info_panel/genres
-@onready var description: Label = $info_panel/description
+@onready var video_bg: VideoStreamPlayer = $info_panel/video_bg
+
 @onready var play_button: Button = $info_panel/play_button
 @onready var play_focus: ColorRect = $info_panel/play_button/play_focus
 @onready var selected_game: ColorRect = $selected_game
@@ -83,6 +88,7 @@ func _create_game_button(folder_name: String) -> Button:
 	var game_folder: String = GAME_DIR + folder_name
 	var game_exec_path: String = game_folder + "/" + folder_name + ".dmg"
 	var game_thumbnail_path: String = game_folder + "/" + folder_name + ".png"
+	var video_path: String = game_folder + "/" + folder_name + ".ogv"
 	var json_data: Dictionary = _load_game_json(folder_name)
 
 	var game_button: Button = Button.new()
@@ -97,6 +103,10 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.set_meta("author", json_data.author)
 	game_button.set_meta("description", json_data.description)
 	game_button.set_meta("genres", json_data.genres)
+	game_button.set_meta("type", json_data.type)
+	game_button.set_meta("creation_year", json_data.creation_year)
+	game_button.set_meta("grad_year", json_data.grad_year)
+	game_button.set_meta("video_path", video_path)
 
 	# Add thumbnail to the button
 	var resized_thumbnail : Image = Image.load_from_file(game_thumbnail_path)
@@ -170,6 +180,16 @@ func update_info_panel(button: Button) -> void:
 	author.text = button.get_meta("author")
 	description.text = button.get_meta("description")
 	genres.text = button.get_meta("genres")
+	type.text = button.get_meta("type")
+	creation_year.text = button.get_meta("creation_year")
+	grad_year.text = "Class of " + button.get_meta("grad_year")
+	
+	var video : VideoStream = load(button.get_meta("video_path"))
+	video_bg.stream = video
+	video_bg.play()
+	
+	#video_bg.stream = load(button.get_meta("video_path"))
+	
 	if connected:
 		play_button.disconnect("pressed", _on_play_button_pressed)
 		connected = false
