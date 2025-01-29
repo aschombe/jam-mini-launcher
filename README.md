@@ -18,3 +18,7 @@ The specs and details of the machine have yet to be determined.
 					|__ game2.arm64/x86_64
 					|__ game2.json
 					|__ game1.png
+					
+# Todo
+- [ ] Make it so the launcher has a universal quit for the games its running
+		- [ ] Change how the launcher prevents input while a game is running
