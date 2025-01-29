@@ -28,20 +28,15 @@ var focused_button: Button
 var last_button_pressed: Button
 var start_button_focused: bool = false
 
-func _process(_delta: float) -> void:
-	focus_button(focused_button)
-	
-	# Prevents more than one game from being launched at a time
-	if game_running and not OS.is_process_running(running_pid):
-		game_running = false
-		
-	# Prevents inputs while game is running
-	if not game_running:
-		set_process_input(true)
+var cooldown: bool = false
+
+func _start_cooldown(duration: float) -> void:
+	cooldown = true
+	await get_tree().create_timer(duration).timeout
+	cooldown = false
 
 func _ready() -> void:
 	info_panel.visible = false
-	#selected_game.visible = false
 	play_focus.visible = false
 	buttons.clear()
 	_load_game_folders()
@@ -50,6 +45,25 @@ func _ready() -> void:
 	if buttons.size() > 0:
 		focused_button = game_grid.get_child(0)
 		game_grid.get_child(0).grab_focus()
+
+func _process(_delta: float) -> void:
+	focus_button(focused_button)
+	
+	# Prevents more than one game from being launched at a time
+	if game_running and not OS.is_process_running(running_pid):
+		game_running = false
+		await _start_cooldown(0.5)
+		
+func _input(_event: InputEvent) -> void:
+	if game_running:
+		if Input.is_action_just_pressed("quit1") and Input.is_action_just_pressed("quit2"):
+			OS.kill(running_pid)
+		
+		return
+	
+	if Input.is_action_pressed("ui_cancel") and start_button_focused:
+		last_button_pressed.grab_focus()
+		start_button_focused = false
 
 # Function to load game folder names
 func _load_game_folders() -> void:
@@ -86,7 +100,8 @@ func _create_game_buttons() -> void:
 # Create a game button with all its properties
 func _create_game_button(folder_name: String) -> Button:
 	var game_folder: String = GAME_DIR + folder_name
-	var game_exec_path: String = game_folder + "/" + folder_name + ".dmg"
+	#var game_exec_path: String = game_folder + "/" + folder_name + ".dmg"
+	var game_exec_path: String = game_folder + "/" + folder_name + ".x86_64"
 	var game_thumbnail_path: String = game_folder + "/" + folder_name + ".png"
 	var video_path: String = game_folder + "/" + folder_name + ".ogv"
 	var json_data: Dictionary = _load_game_json(folder_name)
@@ -119,29 +134,6 @@ func _create_game_button(folder_name: String) -> Button:
 	game_button.connect("focus_entered", focus_button.bind(game_button))
 	return game_button
 
-func focus_start(button: Button):
-	last_button_pressed = button
-	start_button_focused = true
-	play_button.grab_focus()
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_pressed("ui_cancel") and start_button_focused:
-		last_button_pressed.grab_focus()
-		start_button_focused = false
-
-# Load game JSON data
-func _load_game_json(folder_name: String) -> Dictionary:
-	var json_path: String = GAME_DIR + folder_name + "/" + folder_name + ".json"
-	var json_string: String
-	var json_dict: Dictionary = {}
-	var json_file = FileAccess.open(json_path, FileAccess.READ)
-	if json_file:
-		json_string = json_file.get_as_text()
-		var json: JSON = JSON.new()
-		if json.parse(json_string) == OK:
-			json_dict = json.get_data()
-	return json_dict
-
 # Set the neighbors for each button in the grid
 func set_neighbors(button_arr: Array) -> void:
 	for row_index in range(button_arr.size()):
@@ -168,6 +160,24 @@ func _set_button_neighbors(button: Button, row: Array, col_index: int, row_index
 	if row_index == buttons.size() - 1:
 		button.focus_neighbor_bottom = button.get_path()
 
+func focus_start(button: Button):
+	last_button_pressed = button
+	start_button_focused = true
+	play_button.grab_focus()
+
+# Load game JSON data
+func _load_game_json(folder_name: String) -> Dictionary:
+	var json_path: String = GAME_DIR + folder_name + "/" + folder_name + ".json"
+	var json_string: String
+	var json_dict: Dictionary = {}
+	var json_file = FileAccess.open(json_path, FileAccess.READ)
+	if json_file:
+		json_string = json_file.get_as_text()
+		var json: JSON = JSON.new()
+		if json.parse(json_string) == OK:
+			json_dict = json.get_data()
+	return json_dict
+
 # Highlight the selected game on hover
 func focus_button(button: Button) -> void:
 	focused_button = button
@@ -188,8 +198,6 @@ func update_info_panel(button: Button) -> void:
 	video_bg.stream = video
 	video_bg.play()
 	
-	#video_bg.stream = load(button.get_meta("video_path"))
-	
 	if connected:
 		play_button.disconnect("pressed", _on_play_button_pressed)
 		connected = false
@@ -203,14 +211,12 @@ func _on_game_button_pressed(button: Button) -> void:
 
 # Launch the selected game
 func _on_play_button_pressed(button: Button) -> void:
-	if game_running:
+	if game_running or cooldown:
 		return
 	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
 		running_pid = OS.create_process(exec_path, ["-f"])
 		game_running = true
-		# PAUSE INPUT HERE
-		set_process_input(false)
 	else:
 		print("No exec path found for button: ", button.name)
 

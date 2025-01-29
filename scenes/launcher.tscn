@@ -28,7 +28,7 @@ offset_right = 462.0
 offset_bottom = 79.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 50
-text = "JAM Mini Launcher"
+text = "SGDC JAM Mini"
 
 [node name="selected_game" type="ColorRect" parent="."]
 z_index = 100
@@ -36,6 +36,29 @@ layout_mode = 0
 offset_right = 235.0
 offset_bottom = 187.0
 color = Color(1, 1, 0, 0.498039)
+
+[node name="info" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 546.0
+offset_right = 526.0
+offset_bottom = 673.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "To close the currently running game, hit share + menu buttons.
+The JAM Mini is presented by the Stevens Game Development Club
+Weekly meetings every Tuesday @ 9:15 PM in Babbio 122.
+If the machine  is malfunctioning, or you have any questions, 
+comments or concerns, please reach out to us at sgdc@stevens.edu"
+
+[node name="credit" type="Label" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 669.0
+offset_right = 424.0
+offset_bottom = 718.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Developed by: Andrew Schomber, Matthew Bernardon
+Designed by: Filip Sigda"
 
 [node name="game_scroller" type="ScrollContainer" parent="."]
 custom_minimum_size = Vector2(500, 560)
@@ -45,6 +68,7 @@ offset_top = 81.0
 offset_right = 511.0
 offset_bottom = 641.0
 follow_focus = true
+vertical_scroll_mode = 3
 
 [node name="game_grid" type="GridContainer" parent="game_scroller"]
 layout_mode = 2
@@ -77,6 +101,7 @@ offset_right = 618.0
 offset_bottom = 723.0
 autoplay = true
 expand = true
+loop = true
 
 [node name="info_list" type="VBoxContainer" parent="info_panel"]
 layout_mode = 0
