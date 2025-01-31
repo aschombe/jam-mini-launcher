@@ -100,8 +100,8 @@ func _create_game_buttons() -> void:
 # Create a game button with all its properties
 func _create_game_button(folder_name: String) -> Button:
 	var game_folder: String = GAME_DIR + folder_name
-	#var game_exec_path: String = game_folder + "/" + folder_name + ".dmg"
-	var game_exec_path: String = game_folder + "/" + folder_name + ".x86_64"
+	var executable_name: String = folder_name[0].to_upper() + folder_name.substr(1, -1) + ".app"
+	var game_exec_path: String = game_folder + "/" + executable_name
 	var game_thumbnail_path: String = game_folder + "/" + folder_name + ".png"
 	var video_path: String = game_folder + "/" + folder_name + ".ogv"
 	var json_data: Dictionary = _load_game_json(folder_name)

@@ -5,20 +5,33 @@ The JAM Mini itself is a small, portable machine that will be put into the UCC G
 The specs and details of the machine have yet to be determined.
 
 # Game Library Structure (can change based on specific device this is used on):
+```
 |__ /
-	|__ home
-		|__ sgdc
-			|__ MiniLauncher.arm64
-			|__ games
-				|__ game1
-					|__ game1.arm64/x86_64
-					|__ game1.json
-					|__ game1.png
-				|__ game2
-					|__ game2.arm64/x86_64
-					|__ game2.json
-					|__ game1.png
-					
-# Todo
-- [ ] Make it so the launcher has a universal quit for the games its running
-		- [ ] Change how the launcher prevents input while a game is running
+   |__ Users
+      |__ sgdcuser
+         |__ MiniLauncher.app
+         |__ games
+            |__ game1
+               |__ Game1.app
+               |__ game1.json
+               |__ game1.ogv
+               |__ game1.png
+            |__ game2
+               |__ Game2.app
+               |__ game2.json
+               |__ game2.ogv
+               |__ game2.png   
+```
+
+# Json structure:
+```json
+{
+  "name": "Game Name",
+  "author": "Author Name",
+  "description": "Game Description",
+  "genres": "Genre1-Genre2-Genre3",
+  "type": "# of players",
+  "creation_year": "Year Created",
+  "grad_year": "Year Graduated",
+}
+```
