@@ -8,19 +8,19 @@ The specs and details of the machine have yet to be determined.
 ```
 |__ /
    |__ Users
-      |__ sgdcuser
-         |__ MiniLauncher.app
-         |__ games
-            |__ game1
-               |__ Game1.app
-               |__ game1.json
-               |__ game1.ogv
-               |__ game1.png
-            |__ game2
-               |__ Game2.app
-               |__ game2.json
-               |__ game2.ogv
-               |__ game2.png   
+	  |__ sgdcuser
+		 |__ MiniLauncher.app
+		 |__ games
+			|__ game1
+			   |__ Game1.app
+			   |__ game1.json
+			   |__ game1.ogv
+			   |__ game1.png
+			|__ game2
+			   |__ Game2.app
+			   |__ game2.json
+			   |__ game2.ogv
+			   |__ game2.png   
 ```
 
 # Json structure:
@@ -35,3 +35,5 @@ The specs and details of the machine have yet to be determined.
   "grad_year": "Year Graduated",
 }
 ```
+# Todo:
+- [ ] Keep track of the # of times a game has been launched and the time a game as spent open, and save it to that game's respective folder as stats.json
