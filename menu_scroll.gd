@@ -29,7 +29,7 @@ func initialize(arr:Array[Texture2D]) -> void:
 		var icon_instance = icon_prefab.instantiate()
 		icon_instance.texture = texArr[i]
 		icon_instance.material = icon_instance.material.duplicate()
-		icon_instance.global_position.x += icon_instance.size.x * i
+		icon_instance.global_position.x += icon_instance.size.x * icon_instance.scale.x * i
 		topRowContainer.add_child(icon_instance);
 		icon_refs.push_back(icon_instance)
 
@@ -57,10 +57,11 @@ func move_cursor(menu_vec:Vector2):
 func update_icon_positions(smooth=true):
 	for i in range(0,icon_refs.size()):
 		var icon = icon_refs[i];
+		var posx = icon.size.x * i * icon.scale.x + (cursorPos.x + 1 - icon_refs.size()) * icon.size.x * icon.scale.x + screenCenter;
 		if(smooth):
-			icon.global_position.x = lerpf(icon.global_position.x,icon.size.x * i + (cursorPos.x - icon_refs.size()) * icon.size.x + screenCenter,speed)
+			icon.global_position.x = lerpf(icon.global_position.x,posx,speed);
 		else:
-			icon.global_position.x = icon.size.x * i + (cursorPos.x - icon_refs.size()) * icon.size.x + screenCenter;
+			icon.global_position.x = posx;
 		
 		if icon.material != null:
 			icon.material.set_shader_parameter("xpos",-(screenCenter - icon.global_position.x)/120);
