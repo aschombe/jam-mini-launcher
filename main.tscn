@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb0i5jqprp6ki"]
+[gd_scene load_steps=4 format=3 uid="uid://cb0i5jqprp6ki"]
 
 [ext_resource type="PackedScene" uid="uid://ce6pg4ga7c1qi" path="res://menu_scroll.tscn" id="1_6fffc"]
+[ext_resource type="Script" path="res://LauncherNav.gd" id="1_qqco8"]
 [ext_resource type="PackedScene" uid="uid://b2c24m4malfk3" path="res://game_preview.tscn" id="2_0oaj2"]
 
 [node name="Main" type="Control"]
@@ -10,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_qqco8")
 
 [node name="Menu Scroll" parent="." instance=ExtResource("1_6fffc")]
 layout_mode = 1

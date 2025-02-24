@@ -13,7 +13,7 @@ var next_video : VideoStream
 var fading_in = false
 var fading_out = false
 var timer_fade_in = 0
-var timer_fade_out = 0
+var timer_fade_out = 99
 var fade_in_duration = 0.75
 var fade_out_duration = 0.5
 
@@ -28,7 +28,7 @@ func fadeInVideo():
 	timer_fade_in = 0
 
 func fadeOutVideo():
-	timer_fade_out = fade_out_duration
+	timer_fade_out = min(timer_fade_out,fade_out_duration) # if the fade_out is interrupted, continue with the most recent value
 	fading_out = true
 
 func switch_videos():
@@ -36,6 +36,7 @@ func switch_videos():
 	fadeInVideo()
 
 func _process(delta: float) -> void:
+	#fading in functionality
 	if(fading_in):
 		timer_fade_in += delta
 		if(timer_fade_in > fade_in_duration):
@@ -43,13 +44,17 @@ func _process(delta: float) -> void:
 			timer_fade_in = fade_in_duration
 		previewStreamPlayer.modulate.a = timer_fade_in/fade_in_duration
 	
+	#fading out
 	if(fading_out):
 		timer_fade_out -= delta
 		if(timer_fade_out < 0):
 			fading_out = false
 			timer_fade_out = 0
-		switch_videos()
 		previewStreamPlayer.modulate.a = timer_fade_out/fade_out_duration
+		if(fading_out == false): # helps the functionality for interrupting the fade-out
+			timer_fade_out = fade_out_duration
+			switch_videos()
 	
+	#for debugging
 	if(Input.is_action_just_pressed("down")):
 		fadeOutVideo()
