@@ -6,23 +6,50 @@ class_name Previewer
 @export var Title : TextureRect
 
 @export var previewStreamPlayer : VideoStreamPlayer
-@export var bgStreamPlayer : VideoStreamPlayer
+@export var bgStreamPlayer : CanvasItem
+
+var next_video : VideoStream
 
 var fading_in = false
+var fading_out = false
 var timer_fade_in = 0
-var fade_in_duration = 0.5
+var timer_fade_out = 0
+var fade_in_duration = 0.75
+var fade_out_duration = 0.5
 
 func _ready() -> void:
 	Title.global_position.x = get_viewport_rect().size.x / 2 - Title.size.x/2
 
-func setGamePreview(titleImage, videoFile):
-	pass
+func setGamePreview(titleImage : Texture2D, videoFile : VideoStream):
+	next_video = videoFile
 
-func FadeInVideo():
+func fadeInVideo():
+	fading_in = true
 	timer_fade_in = 0
-	fading_in = 0
+
+func fadeOutVideo():
+	timer_fade_out = fade_out_duration
+	fading_out = true
+
+func switch_videos():
+	#previewStreamPlayer = next_video
+	fadeInVideo()
 
 func _process(delta: float) -> void:
 	if(fading_in):
 		timer_fade_in += delta
+		if(timer_fade_in > fade_in_duration):
+			fading_in = false
+			timer_fade_in = fade_in_duration
 		previewStreamPlayer.modulate.a = timer_fade_in/fade_in_duration
+	
+	if(fading_out):
+		timer_fade_out -= delta
+		if(timer_fade_out < 0):
+			fading_out = false
+			timer_fade_out = 0
+		switch_videos()
+		previewStreamPlayer.modulate.a = timer_fade_out/fade_out_duration
+	
+	if(Input.is_action_just_pressed("down")):
+		fadeOutVideo()
