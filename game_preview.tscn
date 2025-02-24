@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2c24m4malfk3"]
+
+[ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="1_72o1k"]
+[ext_resource type="VideoStream" path="res://107916-679600385_small.ogv" id="1_acdpg"]
+[ext_resource type="Script" path="res://Previewer.gd" id="1_dmfp4"]
+
+[node name="Game Preview" type="Control" node_paths=PackedStringArray("Title")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_dmfp4")
+Title = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 937.0
+offset_top = 200.0
+offset_right = 1065.0
+offset_bottom = 328.0
+pivot_offset = Vector2(64, 64)
+texture = ExtResource("1_72o1k")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 0
+offset_top = -8.0
+offset_right = 1925.0
+offset_bottom = 1085.0
+ratio = 1.7778
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="AspectRatioContainer"]
+z_index = -10
+layout_mode = 2
+stream = ExtResource("1_acdpg")
+autoplay = true
+expand = true
+loop = true
+
+[node name="BG stream" type="VideoStreamPlayer" parent="AspectRatioContainer"]
+layout_mode = 2
+autoplay = true
+expand = true
+loop = true
