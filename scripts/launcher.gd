@@ -1,6 +1,7 @@
 extends Control
 
 const GAME_DIR: String = "/Users/Shared/Games/"
+#const GAME_DIR: String ="/Games/"
 @onready var game_title: Label = $info_panel/info_list/game_title
 @onready var author: Label = $info_panel/info_list/author
 @onready var genres: Label = $info_panel/info_list/genres
@@ -27,6 +28,13 @@ var focused_button: Button
 var last_button_pressed: Button
 var start_button_focused: bool = false
 
+var cooldown: bool = false
+
+func _start_cooldown(duration: float) -> void:
+	cooldown = true 
+	await get_tree().create_timer(duration).timeout
+	cooldown = false
+
 func _ready() -> void:
 	info_panel.visible = false
 	play_focus.visible = false
@@ -44,6 +52,14 @@ func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
 	if game_running and not OS.is_process_running(running_pid):
 		game_running = false
+		_start_cooldown(0.5)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+		await get_tree().create_timer(0.3).timeout
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
+		#OS.create_process("/usr/bin/osascript", ["-e", 'tell application JamMiniLauncher to activate'])
+		#OS.create_process(OS.get_executable_path(), [])
+		#get_tree().quit()  # Close this instance, the new one will take focus
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 		
 func _input(_event: InputEvent) -> void:
 	if game_running:
@@ -203,12 +219,17 @@ func _on_game_button_pressed(button: Button) -> void:
 
 # Launch the selected game
 func _on_play_button_pressed(button: Button) -> void:
-	if game_running:
+	if game_running or cooldown:
 		return
 	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
 		running_pid = OS.create_process(exec_path, ["-f"])
 		game_running = true
+		#await get_tree().create_timer(5)
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, 0)
+		#print(DisplayServer.get_window_list())
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, 0)
 	else:
 		print("No exec path found for button: ", button.name)
 
