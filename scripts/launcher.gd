@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+const GAME_DIR: String = "/Users/Shared/Games/"
 #const GAME_DIR: String ="/Games/"
 @onready var game_title: Label = $info_panel/info_list/game_title
 @onready var author: Label = $info_panel/info_list/author
@@ -28,13 +28,6 @@ var focused_button: Button
 var last_button_pressed: Button
 var start_button_focused: bool = false
 
-var cooldown: bool = false
-
-func _start_cooldown(duration: float) -> void:
-	cooldown = true
-	await get_tree().create_timer(duration).timeout
-	cooldown = false
-
 func _ready() -> void:
 	info_panel.visible = false
 	play_focus.visible = false
@@ -52,13 +45,13 @@ func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
 	if game_running and not OS.is_process_running(running_pid):
 		game_running = false
-		await _start_cooldown(0.5)
 		
 func _input(_event: InputEvent) -> void:
 	if game_running:
-		if Input.is_action_just_pressed("quit1") and Input.is_action_just_pressed("quit2"):
-			OS.kill(running_pid)
-		
+		if Input.is_action_just_pressed("quit2"):
+			$quit_timer.start()
+		if Input.is_action_just_released("quit2"):
+			$quit_timer.stop()
 		return
 	
 	if Input.is_action_pressed("ui_cancel") and start_button_focused:
@@ -211,7 +204,7 @@ func _on_game_button_pressed(button: Button) -> void:
 
 # Launch the selected game
 func _on_play_button_pressed(button: Button) -> void:
-	if game_running or cooldown:
+	if game_running:
 		return
 	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
@@ -228,3 +221,7 @@ func _on_play_button_focus_entered() -> void:
 func _on_play_button_focus_exited() -> void:
 	selected_game.visible = true
 	play_focus.visible = false
+
+
+func _on_quit_timer_timeout() -> void:
+	OS.kill(running_pid)
