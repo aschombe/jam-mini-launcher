@@ -1,7 +1,6 @@
 extends Control
 
 const GAME_DIR: String = "/Users/Shared/Games/"
-#const GAME_DIR: String ="/Games/"
 @onready var game_title: Label = $info_panel/info_list/game_title
 @onready var author: Label = $info_panel/info_list/author
 @onready var genres: Label = $info_panel/info_list/genres
