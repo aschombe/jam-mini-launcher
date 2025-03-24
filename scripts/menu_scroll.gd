@@ -9,23 +9,22 @@ class_name MenuScroll
 @export var texArr : Array[Texture2D]
 @export var screenCenter : float = 500
 
+#arbitrary value dictating the arc of the icons in the menu
 @export var icon_chain_arc : float = 120
 
 var icon_refs : Array[TextureRect] = []
 
-var cursorPos : Vector2 = Vector2.ZERO
+var cursorPos : int = 0
 var speed = 0.5
 var holding_dir_loop_delay = 0.5
 var looping_delay = 0
 var held_duration = 0
 var last_move = 0
 
-func _draw():
-	pass#draw_rect(Rect2(Vector2.ZERO, Vector2.ONE * 20),Color.AQUA,true,2,true);
+signal on_cursor_changed
 
 func _ready() -> void:
 	screenCenter = get_viewport_rect().get_center().x - 50
-	initialize.call_deferred(texArr)
 
 #instantiates all the icons and sets them up for viewing
 func initialize(arr:Array[Texture2D]) -> void:
@@ -44,15 +43,16 @@ func _process(delta: float) -> void:
 	if(Input.is_action_just_pressed('right')):
 		looping_delay=0
 		held_duration=0
-		last_move=Vector2(1,0)
-		move_cursor(Vector2(1,0));
+		last_move=1
+		move_cursor(1);
 	
 	if(Input.is_action_just_pressed('left')):
 		looping_delay=0
 		held_duration=0
-		last_move=Vector2(-1,0)
-		move_cursor(Vector2(-1,0));
+		last_move=-1
+		move_cursor(-1);
 	
+	#holding speeds up menu
 	if(Input.is_action_pressed('right') || Input.is_action_pressed('left')):
 		looping_delay += delta
 		held_duration += delta
@@ -60,36 +60,66 @@ func _process(delta: float) -> void:
 			looping_delay = 0
 			move_cursor(last_move)
 	
+	#debug FPS
 	fps_text.text = "fps: "+str(Engine.get_frames_per_second()) + '\n' + str(cursorPos) + " \n" + str(looping_delay)
 	
 	update_icon_positions();
 
-func move_cursor(menu_vec:Vector2):
-	cursorPos += menu_vec
-	if(cursorPos.x < 0):
-		cursorPos.x = icon_refs.size()-1
+# handles moving the cursor left and right
+func move_cursor(menu_float:int):
+	#updating the position
+	cursorPos += menu_float
+	
+	#Bounding the position
+	if(cursorPos < 0):
+		cursorPos = icon_refs.size()-1
 		looping_delay=0
 		held_duration=0
-		update_icon_positions(true);
-	if(cursorPos.x > icon_refs.size()-1):
-		cursorPos.x = 0
+	if(cursorPos > icon_refs.size()-1):
+		cursorPos = 0
 		looping_delay=0
 		held_duration=0
-		update_icon_positions(true);
+	
+	emit_signal("on_cursor_changed",cursorPos)
+	# reset moving things
+	update_icon_positions(true)
 
-
+#handles the visual aspect of updating the icons in the menu
 func update_icon_positions(smooth=true):
 	for i in range(0,icon_refs.size()):
-		var icon = icon_refs[i];
-		var posx = icon.size.x * i * icon.scale.x + (cursorPos.x + 1 - icon_refs.size()) * icon.size.x * icon.scale.x + screenCenter;
+		
+		var icon = icon_refs[i]
+		
+		# posx is created to take the cursorPos and translate it into the correct position for each icon
+		var posx = (
+			icon.size.x * i * icon.scale.x + # offset based on position in array
+			(cursorPos + 1 - icon_refs.size()) * icon.size.x * icon.scale.x + #center the list on the selected game
+			screenCenter # apply offset to the screen center
+			- (icon.size.x * icon.scale.x) / 4
+		)
+		
 		if(smooth):
 			icon.global_position.x = lerpf(icon.global_position.x,posx,speed);
 		else:
 			icon.global_position.x = posx;
 		
 		if icon.material != null:
-			icon.material.set_shader_parameter("xpos",-(screenCenter - icon.global_position.x)/icon_chain_arc);
-			icon.material.set_shader_parameter("num",-1/icon_chain_arc);
+			icon.material.set_shader_parameter("xpos",-(screenCenter - icon.global_position.x)/icon_chain_arc)
+			icon.material.set_shader_parameter("num",-1/icon_chain_arc)
 
-func set_cursor(menu_pos:Vector2):
+func set_cursor(menu_pos:int):
 	cursorPos = menu_pos
+	
+	#Bounding the position
+	if(cursorPos < 0):
+		cursorPos = icon_refs.size()-1
+		looping_delay=0
+		held_duration=0
+	if(cursorPos > icon_refs.size()-1):
+		cursorPos = 0
+		looping_delay=0
+		held_duration=0
+	
+	emit_signal("on_cursor_changed",cursorPos)
+	# reset moving things
+	update_icon_positions(true)

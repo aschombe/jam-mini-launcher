@@ -67,9 +67,9 @@ func _input(_event: InputEvent) -> void:
 
 # Function to load game folder names
 func _load_game_folders() -> void:
-	var folder_name: String
-	var games: DirAccess = DirAccess.open(GAME_DIR)
-	if games:
+	var folder_name : String
+	var games : DirAccess = DirAccess.open(GAME_DIR)
+	if games :
 		games.list_dir_begin()
 		folder_name = games.get_next()
 		while folder_name != "":
@@ -104,7 +104,7 @@ func _create_game_button(folder_name: String) -> Button:
 	var game_exec_path: String = game_folder + "/" + executable_name
 	var game_thumbnail_path: String = game_folder + "/" + folder_name + ".png"
 	var video_path: String = game_folder + "/" + folder_name + ".ogv"
-	var json_data: Dictionary = _load_game_json(folder_name)
+	var json_data : Dictionary = _load_game_json(folder_name)
 
 	var game_button: Button = Button.new()
 	game_button.set_flat(true)

@@ -14,7 +14,7 @@ var fading_in = false
 var fading_out = false
 var timer_fade_in = 0
 var timer_fade_out = 99
-var fade_in_duration = 0.75
+var fade_in_duration = 0.25
 var fade_out_duration = 0.5
 
 func _ready() -> void:
@@ -22,6 +22,7 @@ func _ready() -> void:
 
 func setGamePreview(titleImage : Texture2D, videoFile : VideoStream):
 	next_video = videoFile
+	fadeOutVideo()
 
 func fadeInVideo():
 	fading_in = true
@@ -32,7 +33,8 @@ func fadeOutVideo():
 	fading_out = true
 
 func switch_videos():
-	#previewStreamPlayer = next_video
+	previewStreamPlayer.stream = next_video
+	previewStreamPlayer.play()
 	fadeInVideo()
 
 func _process(delta: float) -> void:
@@ -54,7 +56,3 @@ func _process(delta: float) -> void:
 		if(fading_out == false): # helps the functionality for interrupting the fade-out
 			timer_fade_out = fade_out_duration
 			switch_videos()
-	
-	#for debugging
-	if(Input.is_action_just_pressed("down")):
-		fadeOutVideo()

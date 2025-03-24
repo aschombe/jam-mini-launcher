@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/LauncherNav.gd" id="1_qqco8"]
 [ext_resource type="PackedScene" uid="uid://b2c24m4malfk3" path="res://game_preview.tscn" id="2_0oaj2"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("menu", "preview", "TitleLabel")]
+[node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,20 +12,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qqco8")
-menu = NodePath("Menu Scroll")
-preview = NodePath("Game Preview")
-TitleLabel = NodePath("Label")
 
 [node name="Menu Scroll" parent="." instance=ExtResource("1_6fffc")]
 layout_mode = 1
 
 [node name="Game Preview" parent="." instance=ExtResource("2_0oaj2")]
-
-[node name="Label" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 803.0
-offset_top = 244.0
-offset_right = 1058.0
-offset_bottom = 313.0
-text = "TITLE TEXT"
-fit_content = true

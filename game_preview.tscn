@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="1_72o1k"]
 [ext_resource type="VideoStream" path="res://107916-679600385_small.ogv" id="1_acdpg"]
-[ext_resource type="Script" path="res://Previewer.gd" id="1_dmfp4"]
+[ext_resource type="Script" path="res://scripts/Previewer.gd" id="1_dmfp4"]
 
 [node name="Game Preview" type="Control" node_paths=PackedStringArray("Title", "previewStreamPlayer", "bgStreamPlayer")]
 layout_mode = 3
@@ -13,6 +13,7 @@ previewStreamPlayer = NodePath("AspectRatioContainer/VideoStreamPlayer")
 bgStreamPlayer = NodePath("AspectRatioContainer/BG stream")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 937.0
 offset_top = 200.0
