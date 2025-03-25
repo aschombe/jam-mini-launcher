@@ -38,7 +38,6 @@ expand = true
 loop = true
 
 [node name="BG stream" type="VideoStreamPlayer" parent="AspectRatioContainer"]
-modulate = Color(0.0235294, 0.913725, 0.772549, 1)
 z_index = -11
 layout_mode = 2
 stream = ExtResource("1_acdpg")

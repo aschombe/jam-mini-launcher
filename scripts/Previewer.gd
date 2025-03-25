@@ -15,7 +15,7 @@ var fading_out = false
 var timer_fade_in = 0
 var timer_fade_out = 99
 var fade_in_duration = 0.25
-var fade_out_duration = 0.5
+var fade_out_duration = 0.1
 
 func _ready() -> void:
 	Title.global_position.x = get_viewport_rect().size.x / 2 - Title.size.x/2

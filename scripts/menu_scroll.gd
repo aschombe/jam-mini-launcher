@@ -4,6 +4,7 @@ class_name MenuScroll
 @export var icon_prefab : PackedScene
 
 @export var topRowContainer : Node2D
+@export var backRowContainer : Node2D
 @export var fps_text : Label
 
 @export var texArr : Array[Texture2D]
@@ -12,6 +13,9 @@ class_name MenuScroll
 #arbitrary value dictating the arc of the icons in the menu
 @export var icon_chain_arc : float = 120
 
+@export var empty_texture : Texture2D
+
+var interactable_icon_refs : Array[TextureRect]
 var icon_refs : Array[TextureRect] = []
 
 var cursorPos : int = 0
@@ -37,6 +41,31 @@ func initialize(arr:Array[Texture2D]) -> void:
 		icon_instance.global_position.x += icon_instance.size.x * icon_instance.scale.x * i
 		topRowContainer.add_child(icon_instance);
 		icon_refs.push_back(icon_instance)
+	cursorPos = icon_refs.size() - 1
+	interactable_icon_refs = icon_refs.duplicate()
+	
+	#creates dummy slots
+	var image = empty_texture.get_image()
+	image.resize(235, 187)
+	var resized_texture = ImageTexture.create_from_image(image)
+	
+	for i in range(0,5):
+		var icon_instance = icon_prefab.instantiate()
+		icon_instance.texture = resized_texture
+		backRowContainer.add_child(icon_instance);
+		icon_instance.global_position.x += 0 - icon_instance.size.x * icon_instance.scale.x * i
+		icon_instance.material = icon_instance.material.duplicate()
+		icon_refs.push_front(icon_instance)
+	for i in range(0,5):
+		var icon_instance = icon_prefab.instantiate()
+		icon_instance.texture = resized_texture
+		backRowContainer.add_child(icon_instance);
+		icon_instance.global_position.x += 0 - icon_instance.size.x * icon_instance.scale.x * i
+		icon_instance.material = icon_instance.material.duplicate()
+		icon_refs.push_back(icon_instance)
+
+
+
 
 func _process(delta: float) -> void:
 	#moving the icons
@@ -72,10 +101,10 @@ func move_cursor(menu_float:int):
 	
 	#Bounding the position
 	if(cursorPos < 0):
-		cursorPos = icon_refs.size()-1
+		cursorPos = interactable_icon_refs.size()-1
 		looping_delay=0
 		held_duration=0
-	if(cursorPos > icon_refs.size()-1):
+	if(cursorPos > interactable_icon_refs.size()-1):
 		cursorPos = 0
 		looping_delay=0
 		held_duration=0
@@ -93,7 +122,7 @@ func update_icon_positions(smooth=true):
 		# posx is created to take the cursorPos and translate it into the correct position for each icon
 		var posx = (
 			icon.size.x * i * icon.scale.x + # offset based on position in array
-			(cursorPos + 1 - icon_refs.size()) * icon.size.x * icon.scale.x + #center the list on the selected game
+			(cursorPos + 6 - icon_refs.size()) * icon.size.x * icon.scale.x + #center the list on the selected game
 			screenCenter # apply offset to the screen center
 			- (icon.size.x * icon.scale.x) / 4
 		)
@@ -112,10 +141,10 @@ func set_cursor(menu_pos:int):
 	
 	#Bounding the position
 	if(cursorPos < 0):
-		cursorPos = icon_refs.size()-1
+		cursorPos = interactable_icon_refs.size()-1
 		looping_delay=0
 		held_duration=0
-	if(cursorPos > icon_refs.size()-1):
+	if(cursorPos > interactable_icon_refs.size()-1):
 		cursorPos = 0
 		looping_delay=0
 		held_duration=0

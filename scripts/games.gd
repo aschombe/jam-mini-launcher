@@ -26,3 +26,11 @@ func loadFromJsonDict(dict):
 
 func _to_string() -> String:
 	return self.game_title
+
+func exec() -> int:
+	print("Launching " + game_title)
+	var running_pid = 0
+	if(exec_path):
+		running_pid = OS.create_process(exec_path, ["-f"])
+		return running_pid
+	return -1
