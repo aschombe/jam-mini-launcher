@@ -20,7 +20,7 @@ font_size = 50
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1, 5)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("menu", "preview", "TitleLabel", "DescObject", "AuthLabel", "TypeLabel", "GenreLabel", "DescLabel", "YearLabel")]
+[node name="Main" type="Control" node_paths=PackedStringArray("menu", "preview", "TitleLabel", "DescObject", "AuthorObject", "AuthLabel", "TypeLabel", "GenreLabel", "DescLabel", "YearLabel", "GradLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,11 +32,13 @@ menu = NodePath("Menu Scroll")
 preview = NodePath("Game Preview")
 TitleLabel = NodePath("Title")
 DescObject = NodePath("Description info")
-AuthLabel = NodePath("Description info/Author")
+AuthorObject = NodePath("Description info/AuthorGroup")
+AuthLabel = NodePath("Description info/AuthorGroup/Author")
 TypeLabel = NodePath("Description info/type")
 GenreLabel = NodePath("Description info/Genre")
 DescLabel = NodePath("Description info/Description")
-YearLabel = NodePath("Description info/YearMade")
+YearLabel = NodePath("Description info/AuthorGroup/YearMade")
+GradLabel = NodePath("Description info/Grad")
 
 [node name="Menu Scroll" parent="." instance=ExtResource("2_hm11x")]
 layout_mode = 1
@@ -68,30 +70,6 @@ offset_left = -24.0
 offset_top = 1078.0
 offset_right = 1976.0
 offset_bottom = 3078.0
-
-[node name="Author" type="Label" parent="Description info"]
-layout_mode = 0
-offset_left = 68.0
-offset_top = -127.0
-offset_right = 768.0
-offset_bottom = -47.0
-text = "author1, author1, author1, author1, author1, author1, author1, author1, author1, "
-label_settings = ExtResource("6_jfdgb")
-autowrap_mode = 2
-justification_flags = 8
-text_overrun_behavior = 3
-
-[node name="YearMade" type="Label" parent="Description info"]
-custom_minimum_size = Vector2(460, 0)
-layout_mode = 0
-offset_left = 72.0
-offset_top = -177.0
-offset_right = 532.0
-offset_bottom = -143.0
-text = "2025
-"
-label_settings = ExtResource("6_jfdgb")
-text_overrun_behavior = 3
 
 [node name="type" type="Label" parent="Description info"]
 custom_minimum_size = Vector2(460, 0)
@@ -130,6 +108,19 @@ label_settings = ExtResource("6_jfdgb")
 autowrap_mode = 2
 text_overrun_behavior = 3
 
+[node name="Grad" type="Label" parent="Description info"]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 0
+offset_left = 1306.0
+offset_top = 11.0
+offset_right = 1906.0
+offset_bottom = 211.0
+text = "Graduating: 1999"
+label_settings = ExtResource("6_jfdgb")
+horizontal_alignment = 2
+autowrap_mode = 2
+text_overrun_behavior = 3
+
 [node name="fadebg_bottom" type="TextureRect" parent="Description info"]
 modulate = Color(0.325, 0.325, 0.325, 0.422)
 z_index = -1
@@ -147,6 +138,37 @@ layout_mode = 0
 offset_top = 7.0
 offset_right = 2000.0
 offset_bottom = 2007.0
+
+[node name="AuthorGroup" type="Control" parent="Description info"]
+anchors_preset = 0
+offset_left = 52.0
+offset_top = -197.0
+offset_right = 92.0
+offset_bottom = -157.0
+
+[node name="Author" type="Label" parent="Description info/AuthorGroup"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 70.0
+offset_right = 716.0
+offset_bottom = 150.0
+text = "author1, author1, author1, author1, author1, author1, author1, author1, author1, "
+label_settings = ExtResource("6_jfdgb")
+autowrap_mode = 2
+justification_flags = 8
+text_overrun_behavior = 3
+
+[node name="YearMade" type="Label" parent="Description info/AuthorGroup"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 480.0
+offset_bottom = 54.0
+text = "2025
+"
+label_settings = ExtResource("6_jfdgb")
+text_overrun_behavior = 3
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0

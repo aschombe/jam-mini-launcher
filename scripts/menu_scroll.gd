@@ -72,14 +72,14 @@ func _process(delta: float) -> void:
 	if(Input.is_action_just_pressed('right')):
 		looping_delay=0
 		held_duration=0
-		last_move=1
-		move_cursor(1);
+		last_move=-1
+		move_cursor(-1);
 	
 	if(Input.is_action_just_pressed('left')):
 		looping_delay=0
 		held_duration=0
-		last_move=-1
-		move_cursor(-1);
+		last_move=1
+		move_cursor(1);
 	
 	#holding speeds up menu
 	if(Input.is_action_pressed('right') || Input.is_action_pressed('left')):

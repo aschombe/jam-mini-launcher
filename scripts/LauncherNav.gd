@@ -11,12 +11,14 @@ class_name Launcher
 @export_group("Label Refs")
 @export var TitleLabel : Label
 @export var DescObject : Control
+@export var AuthorObject : Control
 
 @export var AuthLabel : Label
 @export var TypeLabel : Label
 @export var GenreLabel : Label
 @export var DescLabel : Label
 @export var YearLabel : Label
+@export var GradLabel : Label
 
 var games : Array[Game] = []
 
@@ -36,6 +38,8 @@ var title_offset = 50.0
 var desc_t = 0.0
 var desc_start_y = 0.0
 var desc_offset = 50.0
+
+var author_offset = 50.0
 
 # LOAD FUNCTIONS ---------------------------------------------------------------------------------
 # midfied Andrew's launcher code
@@ -143,8 +147,18 @@ func fade_in_desc(game:Game):
 	TypeLabel.text = game.type
 	GenreLabel.text = genres
 	DescLabel.text = game.description
-	YearLabel.text = game.creation_year
+	YearLabel.text = "Released: " + game.creation_year
+	GradLabel.text = "Graduated: " + str(game.grad_year)
 	desc_t = title_dur
+	
+	
+	var last_char = AuthLabel.get_character_bounds(AuthLabel.text.length()-1)
+	last_char.position = last_char.position - AuthLabel.get_character_bounds(0).position
+	if(last_char.position.y > 0):
+		AuthorObject.position.y = -197
+	else:
+		AuthorObject.position.y = -197 + author_offset
+	
 	animate_desc(0)
 
 #handles the animation itself
