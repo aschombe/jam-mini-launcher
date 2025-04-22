@@ -19,7 +19,7 @@ var interactable_icon_refs : Array[TextureRect]
 var icon_refs : Array[TextureRect] = []
 
 var cursorPos : int = 0
-var speed = 0.5
+var speed = 0.1
 var holding_dir_loop_delay = 0.5
 var looping_delay = 0
 var held_duration = 0
@@ -29,6 +29,7 @@ signal on_cursor_changed
 
 func _ready() -> void:
 	screenCenter = get_viewport_rect().get_center().x - 50
+	fps_text.text = ""
 
 #instantiates all the icons and sets them up for viewing
 func initialize(arr:Array[Texture2D]) -> void:
@@ -63,6 +64,7 @@ func initialize(arr:Array[Texture2D]) -> void:
 		icon_instance.global_position.x += 0 - icon_instance.size.x * icon_instance.scale.x * i
 		icon_instance.material = icon_instance.material.duplicate()
 		icon_refs.push_back(icon_instance)
+	update_icon_positions(false)
 
 
 
@@ -90,7 +92,7 @@ func _process(delta: float) -> void:
 			move_cursor(last_move)
 	
 	#debug FPS
-	fps_text.text = "fps: "+str(Engine.get_frames_per_second()) + '\n' + str(cursorPos) + " \n" + str(looping_delay)
+	#fps_text.text = "fps: "+str(Engine.get_frames_per_second()) + '\n' + str(cursorPos) + " \n" + str(looping_delay)
 	
 	update_icon_positions();
 

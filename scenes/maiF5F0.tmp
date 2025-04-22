@@ -165,7 +165,6 @@ text_overrun_behavior = 3
 [node name="TextureRect" type="TextureRect" parent="Description info"]
 modulate = Color(1, 1, 1, 0.7)
 z_index = -1
-layout_mode = 0
 offset_top = 7.0
 offset_right = 1950.0
 offset_bottom = 4926.0

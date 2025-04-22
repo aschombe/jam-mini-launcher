@@ -28,6 +28,7 @@ var cooldown: bool = false
 var current_game : int = 0
 var running_pid = -1
 var is_running
+var quit_hold : Timer
 
 #animation variables
 var title_t = 0.0
@@ -38,6 +39,13 @@ var title_offset = 50.0
 var desc_t = 0.0
 var desc_start_y = 0.0
 var desc_offset = 50.0
+
+var detail_view_offset = 500.0
+var detail_view_target = 0.0
+var detail_view_t = 0
+var detail_view_dur = 1.0
+var detail_anim_offset = 1.0
+var detail_anim_speed = 0.6
 
 var author_offset = 50.0
 
@@ -64,9 +72,9 @@ func _load_game_folders() -> Array[String]:
 # load game info and resources
 func _load_game_info(folder) -> void:
 	var game = _load_game_json(folder)
-		
+	
 	game.video = load(GAME_DIR + folder + "/" + folder + ".ogv")
-		
+	
 	var image : Image = Image.load_from_file(GAME_DIR + folder + "/" + folder + ".png")
 	image.resize(235, 187)
 	game.texture = ImageTexture.create_from_image(image)
@@ -161,7 +169,17 @@ func fade_in_desc(game:Game):
 	
 	animate_desc(0)
 
-#handles the animation itself
+func pull_up_desc():
+	detail_view_target = detail_view_offset
+	detail_view_t = detail_view_dur
+	animate_desc(0)
+
+func pull_down_desc():
+	detail_view_target = 0
+	detail_view_t = detail_view_dur
+	animate_desc(0)
+
+#handles the animations
 func animate_title(delta):
 	#clamp to avoid bounce effect
 	title_t = clampf(title_t,0,title_dur)
@@ -175,12 +193,20 @@ func animate_title(delta):
 func animate_desc(delta):
 	#clamp to avoid bounce effect
 	desc_t = clampf(desc_t,0,title_dur)
-	DescObject.global_position.y = lerpf(DescObject.global_position.y,(desc_t/title_dur) * desc_offset + desc_start_y,0.4)
+	var detail_t = clampf(detail_view_t,0,detail_view_dur)
+	detail_anim_offset = lerpf(detail_anim_offset,detail_view_target,detail_anim_speed)
+	DescObject.global_position.y = lerpf(DescObject.global_position.y,
+	(desc_t/title_dur) * desc_offset 
+	- detail_anim_offset
+	+ desc_start_y,
+	0.4)
 	var c = Color.WHITE
 	c.a = 1-(desc_t/title_dur) 
 	DescObject.modulate = c
 	if(desc_offset > 0):
 		desc_t -= delta
+	if(detail_view_t > 0):
+		detail_view_t -= delta
 
 #running games ------------------------------------------------------------------------------------
 func run_current():
@@ -209,8 +235,49 @@ func _ready():
 	desc_start_y = DescObject.global_position.y
 	fade_in_Title(games[default].game_title)
 	fade_in_desc(games[default])
+	
+	#setup runtime processes
+	quit_hold = Timer.new()
+	quit_hold.timeout.connect(close_game)
+	quit_hold.wait_time = 3.0
+	get_tree().root.call_deferred("add_child",quit_hold)
+
+func _input(event: InputEvent) -> void:
+	if is_running:
+		if Input.is_action_just_pressed("quit2"):
+			quit_hold.start()
+		if Input.is_action_just_released("quit2"):
+			quit_hold.stop()
+	else:
+		if Input.is_action_just_pressed("click"):
+			start_game()
 
 func _process(delta: float) -> void:
+	if is_running and not OS.is_process_running(running_pid):
+		is_running = false
+		_start_cooldown(0.5)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+		await get_tree().create_timer(0.3).timeout
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
+	
+	if(Input.is_action_just_pressed("down")):
+		pull_down_desc()
+	if(Input.is_action_just_pressed("up")):
+		pull_up_desc()
+	
 	#handle the title animation
 	animate_title(delta)
 	animate_desc(delta)
+
+func close_game():
+	if is_running and OS.is_process_running(running_pid):
+		OS.kill(running_pid)
+
+func start_game():
+	var g : Game = games[current_game]
+	
+	var exec_path : String = g.exec_path
+	if exec_path:
+		##DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+		running_pid = OS.create_process(exec_path, ["-f"])
+		is_running = true
