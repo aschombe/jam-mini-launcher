@@ -44,7 +44,7 @@ offset_top = 546.0
 offset_right = 526.0
 offset_bottom = 673.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "To close the currently running game, hit share + menu buttons.
+text = "Hold the menu button to close the current game.
 The JAM Mini is presented by the Stevens Game Development Club
 Weekly meetings every Tuesday @ 9:15 PM in Babbio 122.
 If the machine  is malfunctioning, or you have any questions, 
@@ -226,5 +226,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 0, 0.517647)
 
+[node name="quit_timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="focus_entered" from="info_panel/play_button" to="." method="_on_play_button_focus_entered"]
 [connection signal="focus_exited" from="info_panel/play_button" to="." method="_on_play_button_focus_exited"]
+[connection signal="timeout" from="quit_timer" to="." method="_on_quit_timer_timeout"]

@@ -1,6 +1,6 @@
 extends Control
 
-const GAME_DIR: String = "/home/andrew/Documents/projects/jam-mini-launcher/games/"
+const GAME_DIR: String = "/Users/Shared/Games/"
 #const GAME_DIR: String ="/Games/"
 @onready var game_title: Label = $info_panel/info_list/game_title
 @onready var author: Label = $info_panel/info_list/author
@@ -31,7 +31,7 @@ var start_button_focused: bool = false
 var cooldown: bool = false
 
 func _start_cooldown(duration: float) -> void:
-	cooldown = true
+	cooldown = true 
 	await get_tree().create_timer(duration).timeout
 	cooldown = false
 
@@ -52,13 +52,21 @@ func _process(_delta: float) -> void:
 	# Prevents more than one game from being launched at a time
 	if game_running and not OS.is_process_running(running_pid):
 		game_running = false
-		await _start_cooldown(0.5)
+		_start_cooldown(0.5)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+		await get_tree().create_timer(0.3).timeout
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
+		#OS.create_process("/usr/bin/osascript", ["-e", 'tell application JamMiniLauncher to activate'])
+		#OS.create_process(OS.get_executable_path(), [])
+		#get_tree().quit()  # Close this instance, the new one will take focus
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 		
 func _input(_event: InputEvent) -> void:
 	if game_running:
-		if Input.is_action_just_pressed("quit1") and Input.is_action_just_pressed("quit2"):
-			OS.kill(running_pid)
-		
+		if Input.is_action_just_pressed("quit2"):
+			$quit_timer.start()
+		if Input.is_action_just_released("quit2"):
+			$quit_timer.stop()
 		return
 	
 	if Input.is_action_pressed("ui_cancel") and start_button_focused:
@@ -215,8 +223,13 @@ func _on_play_button_pressed(button: Button) -> void:
 		return
 	var exec_path : String = button.get_meta("exec_path")
 	if exec_path:
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
 		running_pid = OS.create_process(exec_path, ["-f"])
 		game_running = true
+		#await get_tree().create_timer(5)
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED, 0)
+		#print(DisplayServer.get_window_list())
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN, 0)
 	else:
 		print("No exec path found for button: ", button.name)
 
@@ -228,3 +241,7 @@ func _on_play_button_focus_entered() -> void:
 func _on_play_button_focus_exited() -> void:
 	selected_game.visible = true
 	play_focus.visible = false
+
+
+func _on_quit_timer_timeout() -> void:
+	OS.kill(running_pid)
