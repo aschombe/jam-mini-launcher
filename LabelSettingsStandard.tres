@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://3n8ldkaruult"]
+
+[ext_resource type="FontFile" uid="uid://drrpxdsvq42do" path="res://assets/ArchivoBlack-Regular.ttf" id="1_ybhir"]
+
+[resource]
+font = ExtResource("1_ybhir")
+font_size = 30
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(1, 5)

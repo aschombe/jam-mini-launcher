@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://4u1d77ehifkj"]
+
+[ext_resource type="Shader" path="res://menuIconDeform.gdshader" id="1_ei3gi"]
+
+[resource]
+shader = ExtResource("1_ei3gi")
+shader_parameter/xpos = 0.0
+shader_parameter/num = -0.025
+shader_parameter/offset = 0.5
