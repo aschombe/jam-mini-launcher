@@ -42,3 +42,4 @@ Any club members can port their game to the JAM Mini, by following the form in o
 ```
 # Todo:
 - [ ] Keep track of the # of times a game has been launched and the time a game as spent open, and save it to that game's respective folder as stats.json
+- [ ] Clean up files and style
