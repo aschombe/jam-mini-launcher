@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://4u1d77ehifkj"]
 
-[ext_resource type="Shader" path="res://menuIconDeform.gdshader" id="1_ei3gi"]
+[ext_resource type="Shader" path="res://assets/menuIconDeform.gdshader" id="1_ei3gi"]
 
 [resource]
 shader = ExtResource("1_ei3gi")

@@ -2,7 +2,7 @@ extends Control
 class_name Launcher
 
 @export_group("Directory")
-@export var GAME_DIR: String = "C:/Users/filip/Downloads/Games/Games/"
+@export var GAME_DIR: String = "/Users/Shared/Games/"
 
 @export_group("Objects Refs")
 @export var menu : MenuScroll
@@ -33,7 +33,7 @@ const TITLE_POS_OFFSET = 50.0
 
 const DETAIL_VIEW_PULL_DUR = 1.0
 const DETAIL_VIEW_ANIM_SPEED = 0.6
-const DETAIL_VIEW_OFFSET = 500.0
+const DETAIL_VIEW_OFFSET = 250.0
 
 const DESC_BASE_OFFSET = 50.0
 
@@ -102,7 +102,7 @@ func _load_game_info(folder) -> void:
 	
 	#resize image to icon size
 	var image : Image = Image.load_from_file(GAME_DIR + folder + "/" + folder + ".png")
-	image.resize(ICON_SIZE.x,ICON_SIZE.y)
+	image.resize(int(ICON_SIZE.x),int(ICON_SIZE.y))
 	game.texture = ImageTexture.create_from_image(image)
 	
 	#set execution path to launch the game
@@ -176,19 +176,19 @@ func fade_in_Title(text:String):
 #sets all the other data besides title
 func fade_in_desc(game:Game):
 	#parse the arrays
-	var str = ""
+	var strg = ""
 	var genres = ""
 	for i in game.author:
-		str += i
+		strg += i
 		if(i != game.author[game.author.size()-1]):
-			str += ', '
+			strg += ', '
 	for i in game.genres:
 		genres += i
 		if(i != game.genres[game.genres.size()-1]):
 			genres += ', '
 	
 	#display values
-	AuthLabel.text = str
+	AuthLabel.text = strg
 	TypeLabel.text = game.type
 	GenreLabel.text = genres
 	DescLabel.text = game.description
@@ -243,7 +243,7 @@ func animate_title(delta):
 func animate_desc(delta):
 	#clamp to avoid bounce effect
 	desc_t = clampf(desc_t,0,TITLE_ANIM_DUR)
-	var detail_t = clampf(detail_view_t,0,DETAIL_VIEW_PULL_DUR)
+	var _detail_t = clampf(detail_view_t,0,DETAIL_VIEW_PULL_DUR)
 	#calculate positions
 	detail_anim_offset = lerpf(detail_anim_offset,detail_view_target,DETAIL_VIEW_ANIM_SPEED)
 	
@@ -336,16 +336,11 @@ func _process(delta: float) -> void:
 	animate_title(delta)
 	animate_desc(delta)
 
-func _input(event: InputEvent) -> void:
-	#keyboard escape to allow for testing the UI and functionality on windows
-	if(Input.is_action_pressed("debug1") && Input.is_action_pressed("debug2") && Input.is_action_just_pressed("debug3")):
-		is_in_debug_mode = !is_in_debug_mode
+func _input(_event: InputEvent) -> void:
 	if is_running:
 		if Input.is_action_just_pressed("quit"):
-		#if Input.is_action_pressed("quit2") && Input.is_action_pressed("quit1"):
 			quit_hold.start()
 		if Input.is_action_just_released("quit"):
-		#if !Input.is_action_pressed("quit2") || !Input.is_action_pressed("quit1"):
 			quit_hold.stop()
 	else:
 		if Input.is_action_just_pressed("click"):

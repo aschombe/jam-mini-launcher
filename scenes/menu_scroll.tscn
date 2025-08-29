@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="2_bn3k2"]
 [ext_resource type="PackedScene" uid="uid://cff27jb30dbi5" path="res://scenes/icon_display.tscn" id="2_knfyr"]
 [ext_resource type="Texture2D" uid="uid://62h5w4klbjo6" path="res://assets/icon.png" id="3_euve1"]
-[ext_resource type="Texture2D" uid="uid://bl456i0dj3ldn" path="res://256x187sgdc.png" id="5_mc5sb"]
+[ext_resource type="Texture2D" uid="uid://bl456i0dj3ldn" path="res://assets/256x187sgdc.png" id="5_mc5sb"]
 
 [node name="Menu Scroll" type="Control" node_paths=PackedStringArray("topRowContainer", "backRowContainer", "fps_text")]
 layout_mode = 3

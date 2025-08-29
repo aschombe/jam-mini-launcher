@@ -2,14 +2,9 @@
 This is the game launcher for the JAM Mini.  
 It is a simple game launcher for Stevens Game Development club's games.  
 The JAM Mini itself is a small, portable machine that will be put into the UCC Game Room for anyone to use.  
+The specs and details of the machine have yet to be determined.
 
-Hardware details:
-- M4 Mac Mini.... thats it.
-- 4 wireless XBox One controllers
-
-Any club members can port their game to the JAM Mini, by following the form in our discord server's "jam-mini" channel.
-
-# Game Library Structure (can change based on specific device this is used on) (this has to be updated):
+# Game Library Structure (can change based on specific device this is used on):
 ```
 |__ /
    |__ Users
@@ -42,4 +37,3 @@ Any club members can port their game to the JAM Mini, by following the form in o
 ```
 # Todo:
 - [ ] Keep track of the # of times a game has been launched and the time a game as spent open, and save it to that game's respective folder as stats.json
-- [ ] Clean up files and style

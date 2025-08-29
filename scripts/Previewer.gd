@@ -20,7 +20,7 @@ var fade_out_duration = 0.1
 func _ready() -> void:
 	Title.global_position.x = get_viewport_rect().size.x / 2 - Title.size.x/2
 
-func setGamePreview(titleImage : Texture2D, videoFile : VideoStream):
+func setGamePreview(_titleImage : Texture2D, videoFile : VideoStream):
 	next_video = videoFile
 	fadeOutVideo()
 

@@ -1,7 +1,6 @@
 extends Resource
 class_name Game
 
-@export var exec_path : String = ""
 @export var game_title: String = "Default Game Title"
 @export var author: Array[String] = ["Default Author"]
 @export var genres: Array[String] = ["Default genre"]
@@ -9,8 +8,9 @@ class_name Game
 @export var type : String = "SinglePlayer" #player count
 @export var creation_year : String = "1980"
 @export var grad_year: String = "0001"
+@export var exec_path : String = ""
 
-@export var folder_path : String = ""
+#@export var folder_path : String = ""
 
 @export var texture : Texture = null
 @export var video : VideoStream = null
@@ -23,14 +23,3 @@ func loadFromJsonDict(dict):
 	type = dict.type
 	creation_year = dict.creation_year
 	grad_year = dict.grad_year
-
-func _to_string() -> String:
-	return self.game_title
-
-func exec() -> int:
-	print("Launching " + game_title)
-	var running_pid = 0
-	if(exec_path):
-		running_pid = OS.create_process(exec_path, ["-f"])
-		return running_pid
-	return -1

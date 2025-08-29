@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://b2c24m4malfk3"]
 
 [ext_resource type="Texture2D" uid="uid://b0g7p7wsffjgl" path="res://assets/icon.svg" id="1_72o1k"]
-[ext_resource type="VideoStream" path="res://107916-679600385_small.ogv" id="1_acdpg"]
 [ext_resource type="Script" path="res://scripts/Previewer.gd" id="1_dmfp4"]
+[ext_resource type="VideoStream" path="res://assets/black.ogv" id="4_248i3"]
 
 [node name="Game Preview" type="Control" node_paths=PackedStringArray("Title", "previewStreamPlayer", "bgStreamPlayer")]
 layout_mode = 3
@@ -32,15 +32,17 @@ ratio = 1.7778
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="AspectRatioContainer"]
 z_index = -10
 layout_mode = 2
-stream = ExtResource("1_acdpg")
+stream = ExtResource("4_248i3")
+volume_db = -80.0
 autoplay = true
 expand = true
 loop = true
+bus = &"Mute"
 
 [node name="BG stream" type="VideoStreamPlayer" parent="AspectRatioContainer"]
 z_index = -11
 layout_mode = 2
-stream = ExtResource("1_acdpg")
+stream = ExtResource("4_248i3")
 autoplay = true
 expand = true
 loop = true

@@ -25,6 +25,7 @@ var looping_delay = 0
 var held_duration = 0
 var last_move = 0
 
+@warning_ignore("unused_signal")
 signal on_cursor_changed
 
 func _ready() -> void:
