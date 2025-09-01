@@ -193,7 +193,7 @@ func fade_in_desc(game:Game):
 	GenreLabel.text = genres
 	DescLabel.text = game.description
 	YearLabel.text = "Released: " + game.creation_year
-	GradLabel.text = "Graduated: " + str(game.grad_year)
+	GradLabel.text = "Class of " + str(game.grad_year)
 	desc_t = TITLE_ANIM_DUR
 	
 	
@@ -213,12 +213,16 @@ func fade_in_desc(game:Game):
 
 #runs when player presses the hide desc
 func pull_up_desc():
+	$UpLabel.visible = false
+	$DownLabel.visible = true
 	detail_view_target = DETAIL_VIEW_OFFSET
 	detail_view_t = DETAIL_VIEW_PULL_DUR
 	animate_desc(0)
 
 #runs when player presses the pull desc
 func pull_down_desc():
+	$UpLabel.visible = true
+	$DownLabel.visible = false
 	detail_view_target = 0
 	detail_view_t = DETAIL_VIEW_PULL_DUR
 	animate_desc(0)
