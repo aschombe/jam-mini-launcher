@@ -32,6 +32,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_f8rmi")
+GAME_DIR = null
 menu = NodePath("Menu Scroll")
 preview = NodePath("Game Preview")
 TitleLabel = NodePath("Title")
@@ -46,6 +47,7 @@ GradLabel = NodePath("Description info/Grad")
 
 [node name="Menu Scroll" parent="." instance=ExtResource("2_hm11x")]
 layout_mode = 1
+screenCenter = null
 
 [node name="TextureRect" type="TextureRect" parent="Menu Scroll"]
 modulate = Color(1, 1, 1, 0.481)
