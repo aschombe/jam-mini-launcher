@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cb0i5jqprp6ki"]
+[gd_scene load_steps=11 format=3 uid="uid://cb0i5jqprp6ki"]
 
 [ext_resource type="Script" path="res://scripts/LauncherNav.gd" id="1_f8rmi"]
 [ext_resource type="PackedScene" uid="uid://ce6pg4ga7c1qi" path="res://scenes/menu_scroll.tscn" id="2_hm11x"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b2c24m4malfk3" path="res://scenes/game_preview.tscn" id="4_mmtmv"]
 [ext_resource type="FontFile" uid="uid://drrpxdsvq42do" path="res://assets/ArchivoBlack-Regular.ttf" id="5_6dfxj"]
 [ext_resource type="LabelSettings" uid="uid://3n8ldkaruult" path="res://assets/LabelSettingsStandard.tres" id="6_jfdgb"]
+[ext_resource type="AudioStream" uid="uid://do6elp0ddld7s" path="res://assets/beep-329314.mp3" id="7_5xtg5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pw3vs"]
 font = ExtResource("5_6dfxj")
@@ -217,3 +218,7 @@ rotation = 3.14159
 text = "^"
 label_settings = SubResource("LabelSettings_w8d8a")
 horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_5xtg5")
+volume_db = 15.0

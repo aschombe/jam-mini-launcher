@@ -275,6 +275,8 @@ func close_game():
 			OS.kill(running_pid)
 			Global.game_running = false
 			running_pid = -1
+			await get_tree().create_timer(0.5).timeout 
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
 
 func start_game():
 	if cooldown:
@@ -285,7 +287,10 @@ func start_game():
 	var exec_path : String = g.exec_path
 	if exec_path:
 		if(!is_in_debug_mode):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+			await get_tree().create_timer(0.5).timeout
 			running_pid = OS.create_process(exec_path, ["-f"])
+			await get_tree().create_timer(0.5).timeout
 		else:
 			running_pid = 999999999999999
 		Global.game_running = true
@@ -317,18 +322,19 @@ func _ready():
 	#setup runtime processes
 	quit_hold = Timer.new()
 	quit_hold.timeout.connect(close_game)
+	quit_hold.one_shot = true
 	quit_hold.wait_time = 3.0
 	get_tree().root.call_deferred("add_child",quit_hold)
 
 func _process(delta: float) -> void:
 	#while game is running
-	
+	Input.warp_mouse(Vector2(10000, 10000))
 	#autocorrect if PID is closed externally
 	if Global.game_running and (not OS.is_process_running(running_pid) || is_in_debug_mode):
 		Global.game_running = false
 		_start_cooldown(0.5)
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
-		await get_tree().create_timer(0.3).timeout
+		#DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, 0)
+		await get_tree().create_timer(0.5).timeout
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
 		return
 	
@@ -344,8 +350,10 @@ func _process(delta: float) -> void:
 func _input(_event: InputEvent) -> void:
 	if Global.game_running:
 		if Input.is_action_just_pressed("quit"):
+			$AudioStreamPlayer.play()
 			quit_hold.start()
 		if Input.is_action_just_released("quit"):
+			$AudioStreamPlayer.play()
 			quit_hold.stop()
 	else:
 		if Input.is_action_just_pressed("click"):
