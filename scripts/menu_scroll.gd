@@ -68,7 +68,7 @@ func initialize(arr:Array[Texture2D]) -> void:
 	update_icon_positions(false)
 
 func _process(delta: float) -> void:
-	if Global.game_running:
+	if Global.game_running or Global.info_panel_open:
 		return
 	
 	#moving the icons

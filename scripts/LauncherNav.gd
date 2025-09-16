@@ -49,6 +49,7 @@ var cooldown: bool = false
 var current_game : int = 0
 var running_pid = -1
 var quit_hold : Timer
+var shutdown : Timer
 
 #animation variables
 var title_t = 0.0
@@ -278,6 +279,12 @@ func close_game():
 			await get_tree().create_timer(0.5).timeout 
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
 
+# shutting down console
+func shutdown_console():
+	if Global.game_running and (OS.is_process_running(running_pid) or is_in_debug_mode):
+		if(!is_in_debug_mode):
+			OS.execute("osascript", ["-e", 'tell app "System Events" to shut down'])
+
 func start_game():
 	if cooldown:
 		return
@@ -325,6 +332,12 @@ func _ready():
 	quit_hold.one_shot = true
 	quit_hold.wait_time = 3.0
 	get_tree().root.call_deferred("add_child",quit_hold)
+	
+	shutdown = Timer.new()
+	shutdown.timeout.connect(shutdown_console)
+	shutdown.one_shot = true
+	shutdown.wait_time = 5.0
+	get_tree().root.call_deferred("add_child",shutdown)
 
 func _process(delta: float) -> void:
 	#while game is running
@@ -338,9 +351,9 @@ func _process(delta: float) -> void:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, 0)
 		return
 	
-	if(Input.is_action_just_pressed("down")):
+	if(Input.is_action_just_pressed("down") and not Global.info_panel_open):
 		pull_down_desc()
-	if(Input.is_action_just_pressed("up")):
+	if(Input.is_action_just_pressed("up")  and not Global.info_panel_open):
 		pull_up_desc()
 	
 	#handle the title animation
@@ -348,13 +361,19 @@ func _process(delta: float) -> void:
 	animate_desc(delta)
 
 func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("shutdown"):
+		shutdown.start()
+	if Input.is_action_just_released("shutdown"):
+		shutdown.stop()
+	
 	if Global.game_running:
 		if Input.is_action_just_pressed("quit"):
-			$AudioStreamPlayer.play()
 			quit_hold.start()
 		if Input.is_action_just_released("quit"):
-			$AudioStreamPlayer.play()
 			quit_hold.stop()
 	else:
+		if Global.info_panel_open:
+			return
+		
 		if Input.is_action_just_pressed("click"):
 			start_game()
