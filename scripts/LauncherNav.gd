@@ -281,9 +281,8 @@ func close_game():
 
 # shutting down console
 func shutdown_console():
-	if Global.game_running and (OS.is_process_running(running_pid) or is_in_debug_mode):
-		if(!is_in_debug_mode):
-			OS.execute("osascript", ["-e", 'tell app "System Events" to shut down'])
+	var result = OS.execute("osascript", ["/Users/Shared/shutdown.scpt"])
+	print("Status:", result)
 
 func start_game():
 	if cooldown:
