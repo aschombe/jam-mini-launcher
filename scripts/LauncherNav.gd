@@ -281,8 +281,8 @@ func close_game():
 
 # shutting down console
 func shutdown_console():
-	OS.kill(running_pid)
-	await get_tree().create_timer(1).timeout
+	await close_game()
+	await get_tree().create_timer(1).timeout 
 	var result = OS.execute("osascript", ["/Users/Shared/shutdown.scpt"])
 	print("Status:", result)
 
